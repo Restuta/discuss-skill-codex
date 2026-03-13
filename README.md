@@ -1,20 +1,25 @@
 # discuss-skill
 
-`discuss-skill` lets multiple AIs and humans discuss a topic in one append-only markdown file.
+Use Claude, Codex, or another AI to debate a question in one append-only markdown file, then leave a concise consensus a human can review.
 
-It is built for:
+What you can do with it:
 
-1. Claude
-2. Codex
-3. future AI tools that can read markdown instructions and append to a file
+1. start a cross-AI discussion in one file
+2. let different models challenge each other instead of replying in isolation
+3. preserve the full discussion trace
+4. end with a short decision summary, core contention points, and unresolved risks
 
-The design goal is simple:
+The interface is intentionally small:
 
-1. one shared discussion file
-2. one shared protocol
-3. one user-facing interface: `discuss`
-4. explicit discussion mode: `external`, `council`, or `hybrid`
-5. concise consensus output for human review
+```text
+/discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
+/discuss notes/auth-discussion.md
+```
+
+One file.
+One protocol.
+One command surface: `discuss`.
+Explicit mode: `external`, `council`, or `hybrid`.
 
 ## What It Solves
 
@@ -29,6 +34,63 @@ Most AI collaboration setups are either:
 1. humans can read everything
 2. Claude and Codex can participate in the same discussion
 3. the protocol is portable across tools and projects
+
+## Quick Start
+
+### If you use Claude
+
+Install the Claude command:
+
+```bash
+./scripts/install.sh --claude
+```
+
+Then:
+
+```text
+/discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
+/discuss notes/auth-discussion.md
+```
+
+### If you use Codex
+
+Install the Codex skill:
+
+```bash
+./scripts/install.sh --codex
+```
+
+Then:
+
+```text
+discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
+discuss notes/auth-discussion.md
+```
+
+### If you use another AI environment
+
+You do not need a special runtime.
+
+Give the AI:
+
+1. [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md)
+2. [templates/discussion-template.md](templates/discussion-template.md)
+3. a discussion file path
+
+Then prompt it like this:
+
+```text
+Use discuss-protocol-v1.
+If the file does not exist, create it from the template.
+If it exists, continue it.
+Mode is external.
+Append exactly one new turn if appropriate.
+Do not rewrite earlier content.
+Write to: notes/auth-discussion.md
+Topic: Should we rewrite auth?
+```
+
+That is the portability point of this project: any AI that can read files and append markdown can participate.
 
 ## How It Works
 
@@ -113,6 +175,53 @@ Codex should behave the same way:
 2. continue if present
 3. respect `mode`
 4. append exactly one turn unless the mode clearly allows internal ownership
+
+## How To Use In Other AI Environments
+
+This repo is intentionally protocol-first, so it should work outside Claude and Codex too.
+
+If your AI environment supports custom commands, tools, skills, or templates:
+
+1. create one command called `discuss`
+2. point it at [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md)
+3. point it at [templates/discussion-template.md](templates/discussion-template.md)
+4. make it follow the same start-or-continue rules
+
+If your AI environment does not support custom commands:
+
+1. open the protocol file
+2. open the template file
+3. give the AI the discussion file path
+4. tell it whether this is a new or existing discussion
+5. ask it to append one turn under the protocol
+
+Generic start prompt:
+
+```text
+Read discuss-protocol-v1 and follow it exactly.
+Create a new discussion file from the template.
+Mode: external
+Topic: Should we rewrite auth?
+Write to: notes/auth-discussion.md
+Append the first substantive turn and end with challenge questions.
+```
+
+Generic continue prompt:
+
+```text
+Read discuss-protocol-v1 and follow it exactly.
+Continue this existing discussion file:
+notes/auth-discussion.md
+Respect mode and waiting_for.
+Append exactly one new turn if appropriate.
+Do not rewrite earlier content.
+```
+
+Minimum capability required from the AI environment:
+
+1. read a markdown protocol file
+2. read or create a markdown discussion file
+3. append text without rewriting earlier sections
 
 ## Recommended Workflow
 
