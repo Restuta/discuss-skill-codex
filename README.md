@@ -86,6 +86,28 @@ No daemon.
 No fancy coordination server.
 No mystery state hiding somewhere else.
 
+## Why This Helps 🧪
+
+This is not just a cute workflow gimmick.
+There is real research behind the idea that multiple reasoning paths or debating agents can improve outcomes when the process is structured well.
+
+Short version:
+
+1. multi-agent debate can help reduce bad answers and hallucination-like failures
+2. multiple reasoning paths can improve reasoning accuracy
+3. adaptive debate can keep the gains without wasting as much compute
+
+Primary sources:
+
+1. [Improving Factuality and Reasoning in Language Models through Multiagent Debate](https://arxiv.org/abs/2305.14325)
+   Includes the result that debate helped by "reducing fallacious answers and hallucinations."
+2. [Self-Consistency Improves Chain of Thought Reasoning in Language Models](https://arxiv.org/abs/2203.11171)
+   Reports gains including "GSM8K (+17.9%)" from multiple reasoning paths.
+3. [Debate Only When Necessary: Adaptive Multiagent Collaboration for Efficient LLM Reasoning](https://arxiv.org/abs/2504.05047)
+   Shows adaptive debate can improve efficiency "by up to six times."
+
+Longer notes live in [docs/research.md](docs/research.md).
+
 ## Quick Start
 
 ### Claude
