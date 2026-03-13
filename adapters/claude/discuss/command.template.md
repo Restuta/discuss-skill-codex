@@ -26,6 +26,8 @@ Use this template when creating a new discussion file:
 7. Follow the protocol rules for `mode` and `waiting_for`.
 8. If you initialize the file, append the first substantive turn and end with concrete challenge questions.
 9. If you continue the file, append exactly one new turn unless the protocol clearly says it is not your turn.
+10. Treat `mode` as immutable after initialization unless the human explicitly edits the file.
+11. If the user passes `topic` while continuing an existing file, ignore it rather than erroring; at most emit a short notice.
 
 ## Mode behavior
 

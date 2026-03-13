@@ -139,6 +139,11 @@ The command should:
 4. append exactly one new turn if appropriate
 5. leave prior content untouched
 
+Guardrails:
+
+1. `mode` is set at initialization time and should not silently change on later invocations
+2. a `topic` passed on continuation should be ignored, optionally with a short notice
+
 ## Modes
 
 ### `external`

@@ -206,7 +206,26 @@ Examples:
 
 Use it to make ownership obvious to a human reviewer and to help host adapters decide whether to speak.
 
-## 9. Blind Briefs
+## 9. Field Mutability
+
+Treat these fields as initialization-time fields:
+
+1. `topic`
+2. `mode`
+3. `participants`
+4. `blind_briefs`
+5. `max_rounds`
+6. `git_mode`
+
+Guidance:
+
+1. `mode` should be treated as immutable after initialization unless a human explicitly edits the file
+2. a continuation-time `topic` argument should be ignored rather than treated as an error
+3. if a host ignores a continuation-time `topic`, it may emit a short low-noise notice
+
+`waiting_for` and `status` may evolve during the discussion.
+
+## 10. Blind Briefs
 
 `blind_briefs` is optional and defaults to `true`.
 
@@ -221,7 +240,7 @@ When disabled:
 
 Use `blind_briefs: false` for lighter, lower-stakes discussions.
 
-## 10. Round Limits
+## 11. Round Limits
 
 Default `max_rounds` is `5`.
 
@@ -232,7 +251,7 @@ When the round cap is reached:
 
 This is simpler and more predictable than compression-heavy continuation logic.
 
-## 11. Same-Model Lazy Consensus
+## 12. Same-Model Lazy Consensus
 
 If two participants are likely to share the same model biases, assign different lenses.
 
@@ -246,7 +265,7 @@ Suggested lenses:
 Do not use different lenses as theater.
 Use them to force meaningful angle separation.
 
-## 12. Git Modes
+## 13. Git Modes
 
 Supported git modes:
 
@@ -262,7 +281,7 @@ Rules:
 4. never rewrite git history automatically
 5. do not push automatically in v1
 
-## 13. Good Consensus Output
+## 14. Good Consensus Output
 
 A good final result is snappy and easy for a human to scan.
 
@@ -277,7 +296,7 @@ It should make clear:
 Keep it concise.
 Do not turn the final summary into another full essay.
 
-## 14. Unified Host Interface
+## 15. Unified Host Interface
 
 Hosts should expose one user-facing entry point: `discuss`.
 
@@ -295,7 +314,7 @@ Recommended shapes:
 3. `discuss --mode hybrid "topic" file.md`
 4. `discuss file.md`
 
-## 15. Adapter Responsibilities
+## 16. Adapter Responsibilities
 
 Host adapters should only do host-specific things:
 
@@ -307,7 +326,7 @@ Host adapters should only do host-specific things:
 
 Adapters should not invent their own competing protocol rules.
 
-## 16. Non-Goals For v1
+## 17. Non-Goals For v1
 
 1. lock files
 2. sidecar state
