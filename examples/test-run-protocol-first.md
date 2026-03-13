@@ -6,7 +6,7 @@ topic: "Should discuss-skill v1 stay protocol-first?"
 mode: external
 status: closed
 blind_briefs: true
-max_rounds: 5
+max_rounds: 7
 git_mode: none
 waiting_for: none
 participants:
