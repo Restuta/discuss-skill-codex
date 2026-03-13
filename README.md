@@ -154,6 +154,86 @@ Install only one host if needed:
 ./scripts/install.sh --codex
 ```
 
+## Install Examples For Agents
+
+If you are an agent, or a human setting this up for an agent, these are the concrete installation paths.
+
+### Install for Claude agents
+
+Fast path:
+
+```bash
+cd /path/to/discuss-skill-codex
+./scripts/install.sh --claude
+```
+
+That creates:
+
+```text
+~/.claude/commands/discuss.md
+```
+
+Manual install example:
+
+```bash
+repo=/path/to/discuss-skill-codex
+mkdir -p ~/.claude/commands
+sed \
+  -e "s#__PROTOCOL_PATH__#$repo/protocol/discuss-protocol-v1.md#g" \
+  -e "s#__TEMPLATE_PATH__#$repo/templates/discussion-template.md#g" \
+  "$repo/adapters/claude/discuss/command.template.md" \
+  > ~/.claude/commands/discuss.md
+```
+
+### Install for Codex agents
+
+Fast path:
+
+```bash
+cd /path/to/discuss-skill-codex
+./scripts/install.sh --codex
+```
+
+That creates:
+
+```text
+~/.codex/skills/discuss/SKILL.md
+```
+
+Manual install example:
+
+```bash
+repo=/path/to/discuss-skill-codex
+mkdir -p ~/.codex/skills/discuss
+sed \
+  -e "s#__PROTOCOL_PATH__#$repo/protocol/discuss-protocol-v1.md#g" \
+  -e "s#__TEMPLATE_PATH__#$repo/templates/discussion-template.md#g" \
+  "$repo/adapters/codex/discuss/SKILL.template.md" \
+  > ~/.codex/skills/discuss/SKILL.md
+```
+
+### Install for other AI environments
+
+If the environment supports custom commands, skills, or reusable prompts:
+
+1. create one command called `discuss`
+2. make it read [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md)
+3. make it use [templates/discussion-template.md](templates/discussion-template.md) for initialization
+4. make it follow the same start-or-continue rules
+
+If the environment does not support installable commands:
+
+1. give the AI this README
+2. give it [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md)
+3. give it [templates/discussion-template.md](templates/discussion-template.md)
+4. ask it to behave as `discuss`
+
+Minimum install contract for any agent:
+
+1. read protocol file
+2. read or create discussion markdown file
+3. append exactly one turn without rewriting earlier content
+
 ## How To Use With Claude
 
 After installation, use the custom command:
