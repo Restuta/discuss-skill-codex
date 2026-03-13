@@ -442,53 +442,28 @@ If those become necessary later, they should be added in response to real failur
 
 Read this section after the human-facing sections above.
 
-### Source of truth
+README is not the protocol.
+README is only the overview and install handoff.
 
-1. The discussion markdown file is the source of truth.
-2. The protocol is defined in [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md).
-3. Do not invent competing local rules.
+After installation, read these files next:
 
-### Start vs continue
+1. [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md)
+   This is the actual source of truth.
+2. [templates/discussion-template.md](templates/discussion-template.md)
+   Use this when creating a new discussion file.
+3. your installed host adapter
+   Claude: `~/.claude/commands/discuss.md`
+   Codex: `~/.codex/skills/discuss/SKILL.md`
 
-1. If the target file does not exist, initialize it.
-2. If the target file exists, continue it.
-3. Never overwrite an existing discussion file.
+If you are wiring this into another AI environment:
 
-### Field mutability
+1. install or create one command called `discuss`
+2. point it at the protocol file
+3. point it at the template file
+4. then follow the protocol, not the README
 
-Treat these as initialization-time fields:
+Minimum expectation after install:
 
-1. `topic`
-2. `mode`
-3. `participants`
-4. `blind_briefs`
-5. `max_rounds`
-6. `git_mode`
-
-Rules:
-
-1. `mode` is immutable after initialization unless a human explicitly edits the file.
-2. If a caller passes `topic` while continuing an existing file, ignore it. A short low-noise notice is acceptable.
-3. `waiting_for` and `status` may evolve during the discussion.
-
-### Append-only rule
-
-Never:
-
-1. rewrite earlier turns
-2. delete earlier turns
-3. reorder earlier turns
-
-Always reread before appending.
-If the file changed unexpectedly, fail closed and reassess.
-
-### Human review priority
-
-Consensus output should optimize for fast human review:
-
-1. `Decision`
-2. `Why this won`
-3. `Core contention points`
-4. `Resolved conflicts`
-5. `Unresolved conflicts`
-6. `Confidence`
+1. read protocol
+2. read template if starting a new file
+3. append to the discussion file without rewriting earlier content
