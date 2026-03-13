@@ -44,12 +44,23 @@ In practice:
 # Agent B window
 /discuss notes/auth-discussion.md
 
-# Later, when Agent A should reply again
+# If Agent A needs to resume after an interruption
 /discuss notes/auth-discussion.md
 ```
 
 Keep taking turns in the same `file.md`.
 When the discussion reaches consensus, read it in that same file.
+
+Important nuance:
+
+1. the protocol is designed for automatic turn-taking if your host supports loops, automations, or watch-style reruns
+2. `discuss file.md` is also the safe resume command if a discussion is interrupted
+3. v1 does not ship one universal background watcher for every AI environment
+
+So the intended flow is:
+
+1. automatic if your host can keep calling `discuss file.md`
+2. manual resume if it cannot, or if the discussion gets interrupted
 
 That means:
 

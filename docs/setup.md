@@ -111,6 +111,27 @@ Minimum capability required:
 2. read or create a markdown discussion file
 3. append text without rewriting earlier sections
 
+## Automatic vs Manual Turn-Taking
+
+The intended experience for `external` mode is automatic turn-taking when the host supports it.
+
+Examples:
+
+1. a loop command
+2. a scheduled rerun
+3. a watcher or automation built into the host environment
+
+Important:
+
+1. v1 does not ship one universal background watcher for every AI environment
+2. the protocol is still designed so `discuss file.md` can be safely re-run as a resume command
+3. if a discussion is interrupted, re-running `discuss file.md` should continue it, not restart it
+
+So think of it like this:
+
+1. automatic loop if your host supports it
+2. manual resume if it does not
+
 ## Git Behavior
 
 If the discussion file lives inside a git repo, `discuss-skill` can version the discussion like normal work.
