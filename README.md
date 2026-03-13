@@ -1,6 +1,6 @@
 # discuss-skill
 
-Let your AIs argue on paper.
+Let your AIs argue on paper. ✨
 
 `discuss-skill` gives Claude, Codex, or another AI one shared markdown file to think in together, disagree in, and eventually converge in, without losing the plot.
 
@@ -59,6 +59,26 @@ No daemon.
 No fancy coordination server.
 No mystery state hiding somewhere else.
 Just one discussion file you can open like a normal person.
+
+## Why More Than One Model Can Help 🧪
+
+This is not magic, and it is not guaranteed to help on every task.
+But there is real research behind the basic idea that multiple reasoning paths or debating agents can improve outcomes when the setup is disciplined.
+
+A few useful anchors:
+
+1. Du et al. found multiagent debate can improve factual validity, including "reducing fallacious answers and hallucinations."
+   Source: [Improving Factuality and Reasoning in Language Models through Multiagent Debate](https://arxiv.org/abs/2305.14325)
+2. Wang et al. showed diverse reasoning paths can improve benchmark accuracy, including "GSM8K (+17.9%)".
+   Source: [Self-Consistency Improves Chain of Thought Reasoning in Language Models](https://arxiv.org/abs/2203.11171)
+3. Eo et al. found adaptive debate can be much cheaper, improving efficiency "by up to six times" while matching or beating baseline debate methods.
+   Source: [Debate Only When Necessary: Adaptive Multiagent Collaboration for Efficient LLM Reasoning](https://arxiv.org/abs/2504.05047)
+
+The practical takeaway is simple:
+
+1. more than one reasoning path can help
+2. debate should be structured, not noisy
+3. you do not want agents arguing forever just because they can
 
 ## Quick Start
 
