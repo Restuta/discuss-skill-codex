@@ -6,7 +6,7 @@ topic: "{{TOPIC}}"
 mode: external
 status: active
 blind_briefs: true
-max_rounds: 5
+max_rounds: 7
 git_mode: none
 waiting_for: next-participant
 participants:
