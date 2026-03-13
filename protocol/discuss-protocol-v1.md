@@ -60,7 +60,7 @@ topic: "<topic>"
 mode: external
 status: active
 blind_briefs: true
-max_rounds: 5
+max_rounds: 7
 git_mode: none
 waiting_for: next-participant
 participants:
@@ -160,15 +160,38 @@ Each `research` turn should usually contain:
 4. `Confidence`
 5. `Questions for the next reviewer`
 
+Prefer a calibrated percentage when practical, for example `70%`.
+
 ### 7.2 Response
 
 Each `response` turn should usually contain:
 
-1. `What I agree with`
-2. `What I disagree with`
-3. `What changed in my view`
-4. `What still needs resolution`
+1. `Response to previous point`
+2. `New evidence or angle`
+3. `Current position`
+4. `Question for the next reviewer`
 5. `Confidence`
+
+Guidance:
+
+1. `Response to previous point` should steel-man the strongest prior point before disagreeing or synthesizing.
+2. `New evidence or angle` should add something meaningfully new when possible. If nothing new exists, say so explicitly.
+3. `Current position` should show what changed, if anything.
+4. `Question for the next reviewer` should drive the discussion toward resolution instead of producing generic commentary.
+5. `Confidence` should preferably use a calibrated percentage, for example `70%`.
+
+From the third `response` turn onward, a `response` turn may also include:
+
+6. `Convergence assessment`
+
+Allowed values:
+
+1. `CONVERGING`
+2. `PARALLEL`
+3. `DIVERGING`
+4. `DEADLOCKED`
+
+For this rule, count only `response` turns in the file body. Do not count `research`, `consensus`, or `human-note` entries.
 
 ### 7.3 Consensus
 
@@ -242,7 +265,7 @@ Use `blind_briefs: false` for lighter, lower-stakes discussions.
 
 ## 11. Round Limits
 
-Default `max_rounds` is `5`.
+Default `max_rounds` is `7`.
 
 When the round cap is reached:
 

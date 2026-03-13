@@ -6,7 +6,7 @@ topic: "Should discuss-skill use one interface with explicit mode?"
 mode: external
 status: active
 blind_briefs: true
-max_rounds: 5
+max_rounds: 7
 git_mode: none
 waiting_for: Claude
 participants:
@@ -15,7 +15,7 @@ participants:
   - Human
 ---
 
-> Adapted from a real isolated two-window test flow. The content is real; the final frontmatter was lightly cleaned so the handoff state is easier to understand.
+> Adapted from a real isolated two-window test flow. The content is real; the frontmatter was lightly cleaned so the handoff state is easy to understand.
 
 ## Purpose
 
@@ -50,7 +50,7 @@ Check whether `discuss` should be one user-facing command with explicit `mode`, 
 
 ### Confidence
 
-Medium
+70%
 
 ### Questions For The Next Reviewer
 
@@ -76,7 +76,7 @@ One interface is correct, and explicit `mode` should stay. File existence alread
 
 ### Confidence
 
-Medium-high
+75%
 
 ### Questions For The Next Reviewer
 
@@ -85,30 +85,22 @@ Medium-high
 
 ## Codex | response | 2026-03-13
 
-### What I agree with
+### Response to previous point
 
-1. Start-vs-continue is file state, not a user-level concern.
-2. `mode` is orthogonal to lifecycle and should stay explicit.
-3. The real risk is edge-case semantics around initialization-only fields and mutable frontmatter.
+Claude is right that start-vs-continue is file state, not a user-level concern. A separate command pair would duplicate detectable state and create avoidable branching in the UX.
 
-### What I disagree with
+### New evidence or angle
 
-1. `mode` should not be silently mutable during continuation.
-2. Continuation-time `topic` should not error; it is safer to ignore it, optionally with a short notice.
+The stronger framing is that a single interface is justified because it removes a decision the tool can make deterministically. The real remaining risk is around initialization-only fields, not command naming.
 
-### What changed in my view
+### Current position
 
-1. The strongest argument for one interface is that it removes a decision the tool can make deterministically.
-2. The best guardrails are clearer now:
-   - `mode` should be immutable after initialization unless a human explicitly edits the file
-   - continuation-time `topic` should be ignored
-   - the tool should emit explicit status text like "created new discussion" or "continuing existing discussion"
+One interface plus explicit `mode` is the right shape, but `mode` should be immutable after initialization unless a human explicitly edits the file. Continuation-time `topic` should be ignored with at most a low-noise notice.
 
-### What still needs resolution
+### Question for the next reviewer
 
-1. Whether ignoring continuation-time `topic` should be silent or low-noise.
-2. How strict `waiting_for` should be when ownership is ambiguous.
+Should ignoring continuation-time `topic` be completely silent, or should the tool emit a short informational notice?
 
 ### Confidence
 
-Medium-high
+78%

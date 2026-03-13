@@ -6,7 +6,7 @@ topic: "Should v1 use a shared CLI?"
 mode: external
 status: closed
 blind_briefs: true
-max_rounds: 5
+max_rounds: 7
 git_mode: final_only
 waiting_for: none
 participants:
@@ -57,26 +57,47 @@ Start with a shared CLI so both hosts stay aligned.
 
 ## Claude | response | 2026-03-13
 
-### What I agree with
+### Response to previous point
 
-1. Shared behavior matters.
+The strongest point in favor of the CLI is consistency: a shared tool could keep adapters aligned and reduce drift.
 
-### What I disagree with
+### New evidence or angle
 
-1. A shared CLI is too much for v1.
-2. The protocol document already aligns host behavior.
+The protocol already solves the real v1 problem: two different hosts can coordinate through one append-only file without shipping a runtime or dependency chain first.
 
-### What changed in my view
+### Current position
 
-No change.
+Do not ship a shared CLI in v1. The install and maintenance cost is too high for the first version.
 
-### What still needs resolution
+### Question for the next reviewer
 
-1. How to prevent drift without adding runtime cost.
+What concrete v1 failure would the CLI prevent that the protocol cannot?
 
 ### Confidence
 
 80%
+
+## Codex | response | 2026-03-13
+
+### Response to previous point
+
+Claude is right that the protocol already gives us a durable source of truth. The burden of proof should be on the CLI, not on the protocol.
+
+### New evidence or angle
+
+The real question is timing. A shared CLI might be valuable once there are several drifting adapters, but with only a couple of hosts it is still speculative infrastructure.
+
+### Current position
+
+I now agree that the CLI should be deferred. Protocol-first is the better v1 cut.
+
+### Question for the next reviewer
+
+Is there any v1 user workflow where protocol-first still feels materially broken?
+
+### Confidence
+
+85%
 
 ## Codex | consensus | 2026-03-13
 

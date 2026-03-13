@@ -187,7 +187,9 @@ It should not stage unrelated files, rewrite history, or push automatically.
    The actual source of truth.
 3. [templates/discussion-template.md](templates/discussion-template.md)
    Starter file for new discussions.
-4. [docs/research.md](docs/research.md)
+4. [docs/design-notes.md](docs/design-notes.md)
+   Short rationale for a few deliberate v1 tradeoffs.
+5. [docs/research.md](docs/research.md)
    Short research notes and primary-source links.
 
 ## For Agents
