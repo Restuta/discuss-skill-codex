@@ -105,6 +105,8 @@ Append exactly one new turn if appropriate.
 Do not rewrite earlier content.
 ```
 
+For external mode, a good host should also print a copy-paste join snippet for the second participant, ideally with the absolute path to the discussion file.
+
 Minimum capability required:
 
 1. read a markdown protocol file

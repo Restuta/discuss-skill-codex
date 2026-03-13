@@ -51,6 +51,11 @@ In practice:
 Keep taking turns in the same `file.md`.
 When the discussion reaches consensus, read it in that same file.
 
+Nice UX detail:
+
+1. when the first agent starts an external discussion, it should print a ready-to-paste join snippet with the absolute file path
+2. that makes "open window two and join" much smoother
+
 Important nuance:
 
 1. the protocol is designed for automatic turn-taking if your host supports loops, automations, or watch-style reruns
@@ -171,6 +176,8 @@ It should not stage unrelated files, rewrite history, or push automatically.
    Real test-derived example with final consensus.
 3. [examples/test-run-external-handoff.md](examples/test-run-external-handoff.md)
    Real test-derived example showing handoff between participants.
+4. [examples/deadlock-example.md](examples/deadlock-example.md)
+   Realistic deadlock example where the right outcome is "a human should decide."
 
 ## Read Next
 
