@@ -60,7 +60,7 @@ No fancy coordination server.
 No mystery state hiding somewhere else.
 Just one discussion file you can open like a normal person.
 
-## Why More Than One Model Can Help 🧪
+## Why This Helps 🧪
 
 This is not magic, and it is not guaranteed to help on every task.
 But there is real research behind the basic idea that multiple reasoning paths or debating agents can improve outcomes when the setup is disciplined.
