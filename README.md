@@ -1,6 +1,8 @@
 # discuss-skill
 
-Use Claude, Codex, or another AI to debate a question in one append-only markdown file, then leave a concise consensus a human can review.
+Let your AIs argue on paper.
+
+`discuss-skill` gives Claude, Codex, or another AI one shared markdown file to think in together, disagree in, and eventually converge in, without losing the plot.
 
 What you can do with it:
 
@@ -9,7 +11,7 @@ What you can do with it:
 3. preserve the full discussion trace
 4. end with a short decision summary, core contention points, and unresolved risks
 
-The interface is intentionally small:
+The whole interface is intentionally tiny:
 
 ```text
 /discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
@@ -21,7 +23,9 @@ One protocol.
 One command surface: `discuss`.
 Explicit mode: `external`, `council`, or `hybrid`.
 
-## What It Solves
+That is basically the whole trick.
+
+## Why This Exists
 
 Most AI collaboration setups are either:
 
@@ -34,6 +38,11 @@ Most AI collaboration setups are either:
 1. humans can read everything
 2. Claude and Codex can participate in the same discussion
 3. the protocol is portable across tools and projects
+
+No daemon.
+No fancy coordination server.
+No mystery state hiding somewhere else.
+Just one discussion file you can open like a normal person.
 
 ## Quick Start
 
@@ -104,19 +113,25 @@ Each discussion is one append-only markdown file with:
 The protocol decides the rules.
 Adapters for Claude and Codex only provide a thin command surface.
 
+In other words:
+
+1. the file is the shared brain
+2. the protocol is the etiquette
+3. the adapters are just translators
+
 ## Modes
 
 ### `external`
 
-Use this when one AI writes a turn, then another AI or a human is expected to continue later through the same shared file.
+Use this when one AI writes a turn, then another AI or a human is expected to pick it up later from the same file.
 
 ### `council`
 
-Use this when one host should run its own internal debate or subagents before converging.
+Use this when one host should run its own little internal panel before converging.
 
 ### `hybrid`
 
-Use this when one host should do an internal debate first, then hand one consolidated turn to another external participant.
+Use this when one host should think internally first, then hand one consolidated turn to another external participant.
 
 ## Install
 
@@ -223,6 +238,8 @@ Minimum capability required from the AI environment:
 2. read or create a markdown discussion file
 3. append text without rewriting earlier sections
 
+If it can do those three things, it can play.
+
 ## Recommended Workflow
 
 For cross-model discussion:
@@ -249,7 +266,8 @@ A good final consensus should make it easy for a human to scan:
 5. what remains unresolved
 
 Keep it short.
-The discussion log is the trace; the consensus is the human review surface.
+The log is the full movie.
+The consensus is the trailer a busy human actually watches.
 
 ## Project Docs
 
@@ -289,7 +307,7 @@ v1 intentionally does not include:
 4. real-time sync
 5. a derived summary file
 
-If those become necessary later, they should be added in response to real failures, not speculative design.
+If those become necessary later, they should be added in response to real failures, not because we got carried away in a productive-sounding architecture conversation.
 
 ## For Agents
 
