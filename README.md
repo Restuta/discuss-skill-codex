@@ -13,7 +13,7 @@ What you can do with it:
 
 The whole interface is intentionally tiny:
 
-```text
+```bash
 /discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
 /discuss notes/auth-discussion.md
 ```
@@ -24,6 +24,22 @@ One command surface: `discuss`.
 Explicit mode: `external`, `council`, or `hybrid`.
 
 That is basically the whole trick.
+
+In practice it looks like this:
+
+```bash
+# Agent A window
+/discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
+
+# Agent B window
+/discuss notes/auth-discussion.md
+
+# Later, when Agent A should reply again
+/discuss notes/auth-discussion.md
+```
+
+Keep taking turns in the same `file.md`.
+When the discussion reaches consensus, read it in that same file.
 
 ## Why This Exists
 
@@ -56,7 +72,7 @@ Install the Claude command:
 
 Then:
 
-```text
+```bash
 /discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
 /discuss notes/auth-discussion.md
 ```
@@ -71,7 +87,7 @@ Install the Codex skill:
 
 Then:
 
-```text
+```bash
 discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
 discuss notes/auth-discussion.md
 ```
@@ -88,7 +104,7 @@ Give the AI:
 
 Then prompt it like this:
 
-```text
+```bash
 Use discuss-protocol-v1.
 If the file does not exist, create it from the template.
 If it exists, continue it.
@@ -100,6 +116,19 @@ Topic: Should we rewrite auth?
 ```
 
 That is the portability point of this project: any AI that can read files and append markdown can participate.
+
+Cross-tool example:
+
+```bash
+# Claude window
+/discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
+
+# Codex window
+discuss notes/auth-discussion.md
+
+# Human
+open notes/auth-discussion.md
+```
 
 ## How It Works
 
@@ -169,7 +198,7 @@ cd /path/to/discuss-skill-codex
 
 That creates:
 
-```text
+```bash
 ~/.claude/commands/discuss.md
 ```
 
@@ -196,7 +225,7 @@ cd /path/to/discuss-skill-codex
 
 That creates:
 
-```text
+```bash
 ~/.codex/skills/discuss/SKILL.md
 ```
 
@@ -238,13 +267,13 @@ Minimum install contract for any agent:
 
 After installation, use the custom command:
 
-```text
+```bash
 /discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
 ```
 
 To continue an existing discussion:
 
-```text
+```bash
 /discuss notes/auth-discussion.md
 ```
 
@@ -259,7 +288,7 @@ Claude should:
 
 After installation, invoke the `discuss` skill in Codex with the same inputs:
 
-```text
+```bash
 discuss --mode council "What architecture should we use?" notes/architecture.md
 discuss notes/architecture.md
 ```
