@@ -67,11 +67,15 @@ The protocol already solves the real v1 problem: two different hosts can coordin
 
 ### Current position
 
-Do not ship a shared CLI in v1. The install and maintenance cost is too high for the first version. Confidence: 80%.
+Do not ship a shared CLI in v1. The install and maintenance cost is too high for the first version.
 
 ### Question for the next reviewer
 
 What concrete v1 failure would the CLI prevent that the protocol cannot?
+
+### Confidence
+
+80%
 
 ## Codex | response | 2026-03-13
 
@@ -85,11 +89,15 @@ The real question is timing. A shared CLI might be valuable once there are sever
 
 ### Current position
 
-I now agree that the CLI should be deferred. Protocol-first is the better v1 cut. Confidence: 85%.
+I now agree that the CLI should be deferred. Protocol-first is the better v1 cut.
 
 ### Question for the next reviewer
 
 Is there any v1 user workflow where protocol-first still feels materially broken?
+
+### Confidence
+
+85%
 
 ## Codex | consensus | 2026-03-13
 
