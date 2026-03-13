@@ -11,6 +11,21 @@ What you get:
 3. one command surface: `discuss`
 4. a concise final consensus for humans
 
+Use it in three ways:
+
+1. `external`
+   Two external AIs take turns in the same file.
+2. `council`
+   One AI runs its own internal subagents or internal debate.
+3. `hybrid`
+   One AI debates internally first, then hands a consolidated turn to another external participant.
+
+Install rule:
+
+1. if two external AIs will participate, install it in both
+2. if you are using two windows of the same AI, install it once in that AI environment
+3. if you are using `council`, install it only in the host that will run the internal debate
+
 ## Tiny Interface
 
 ```bash
@@ -35,6 +50,12 @@ In practice:
 
 Keep taking turns in the same `file.md`.
 When the discussion reaches consensus, read it in that same file.
+
+That means:
+
+1. `Claude + Codex` external discussion: install in Claude and Codex
+2. `Claude + Claude` or `Codex + Codex` external discussion: install once in that environment, open two windows
+3. `council` mode: one AI can do the whole thing internally
 
 ## Why It Exists
 
