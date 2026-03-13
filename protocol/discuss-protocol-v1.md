@@ -1,0 +1,238 @@
+# discuss-protocol-v1
+
+## 1. Goal
+
+Use one append-only markdown file for a structured discussion between multiple AIs and optional human participants.
+
+The goal is not to force agreement.
+The goal is to produce:
+
+1. better challenge and refinement than a single pass
+2. a durable human-readable audit trail
+3. a concise final summary with contention and conflict resolution
+
+## 2. Source Of Truth
+
+The discussion markdown file is the source of truth.
+
+v1 intentionally does not use:
+
+1. a shared CLI runtime
+2. a database
+3. a sidecar state file
+4. a lock file
+
+## 3. Safety Model
+
+v1 uses `reread-before-append`.
+
+Before adding a new turn, the participant must:
+
+1. reread the latest file content
+2. confirm the latest substantive turn still matches what it thinks it is replying to
+3. append only if the file state still supports that turn
+
+If the file changed unexpectedly, the participant must stop, reread, and reconsider.
+
+Fail closed.
+Do not guess.
+
+## 4. Discussion File Requirements
+
+### 4.1 Append-only
+
+Never:
+
+1. rewrite earlier turns
+2. delete earlier turns
+3. reorder earlier turns
+
+Every change must be a new appended section.
+
+### 4.2 Minimal frontmatter
+
+Use a small frontmatter block at the top of the file:
+
+```yaml
+---
+protocol: discuss-protocol-v1
+topic: "<topic>"
+status: active
+blind_briefs: true
+max_rounds: 5
+git_mode: none
+participants:
+  - Codex
+  - Claude
+  - Human
+---
+```
+
+Keep this minimal.
+Do not turn the markdown file into a database.
+
+### 4.3 Required top sections
+
+The file should start with:
+
+1. title
+2. frontmatter
+3. purpose
+4. rules
+5. topics to resolve
+6. current state
+
+## 5. Turn Types
+
+Use only these turn types in v1:
+
+1. `research`
+2. `response`
+3. `consensus`
+4. `human-note`
+
+Keep the heading simple:
+
+```md
+## Codex | research | 2026-03-13
+## Claude | response | 2026-03-13
+## Human | human-note | 2026-03-13
+## Codex | consensus | 2026-03-13
+```
+
+## 6. Turn Body Shape
+
+### 6.1 Research
+
+Each `research` turn should usually contain:
+
+1. `Position`
+2. `Evidence`
+3. `Challenges`
+4. `Confidence`
+5. `Questions for the next reviewer`
+
+### 6.2 Response
+
+Each `response` turn should usually contain:
+
+1. `What I agree with`
+2. `What I disagree with`
+3. `What changed in my view`
+4. `What still needs resolution`
+5. `Confidence`
+
+### 6.3 Consensus
+
+Each `consensus` turn must be concise and optimized for human review.
+
+It must include:
+
+1. `Decision`
+2. `Why this won`
+3. `Core contention points`
+4. `Resolved conflicts`
+5. `Unresolved conflicts`
+6. `Confidence`
+
+### 6.4 Human-note
+
+Human notes may add:
+
+1. missing context
+2. constraints
+3. tie-break decisions
+4. questions
+
+## 7. Blind Briefs
+
+`blind_briefs` is optional and defaults to `true`.
+
+When enabled:
+
+1. each AI should produce its own first-pass analysis before relying on another participant's conclusions
+2. after that, normal response turns may refer to prior turns
+
+When disabled:
+
+1. participants may directly enter response mode
+
+Use `blind_briefs: false` for lighter, lower-stakes discussions.
+
+## 8. Round Limits
+
+Default `max_rounds` is `5`.
+
+When the round cap is reached:
+
+1. participants stop expanding the debate
+2. the next substantive turn must be a synthesis or consensus attempt
+
+This is simpler and more predictable than compression-heavy continuation logic.
+
+## 9. Same-Model Lazy Consensus
+
+If two participants are likely to share the same model biases, assign different lenses.
+
+Suggested lenses:
+
+1. `risk / cost / failure mode`
+2. `value / upside / opportunity`
+3. `simplicity / install friction`
+4. `correctness / rigor / edge cases`
+
+Do not use different lenses as theater.
+Use them to force meaningful angle separation.
+
+## 10. Git Modes
+
+Supported git modes:
+
+1. `none`
+2. `final_only`
+3. `every_turn`
+
+Rules:
+
+1. if the discussion is inside a git repo and the user has not specified a mode, ask once
+2. if you must infer, default to `final_only`
+3. never stage unrelated files
+4. never rewrite git history automatically
+5. do not push automatically in v1
+
+## 11. Good Consensus Output
+
+A good final result is snappy and easy for a human to scan.
+
+It should make clear:
+
+1. what decision was made
+2. why it won
+3. what the important disagreements were
+4. how those disagreements were resolved
+5. what remains unresolved
+
+Keep it concise.
+Do not turn the final summary into another full essay.
+
+## 12. Adapter Responsibilities
+
+Host adapters should only do host-specific things:
+
+1. expose the skill name
+2. gather the topic and file path
+3. point the AI at this protocol
+4. create or continue the discussion file
+
+Adapters should not invent their own competing protocol rules.
+
+## 13. Non-Goals For v1
+
+1. lock files
+2. sidecar state
+3. shared CLI runtime
+4. network service
+5. real-time sync
+6. derived summary files
+
+If these become necessary later, add them based on real failures, not speculative design.
