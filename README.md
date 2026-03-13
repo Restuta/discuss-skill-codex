@@ -182,6 +182,35 @@ Use this when one host should run its own little internal panel before convergin
 
 Use this when one host should think internally first, then hand one consolidated turn to another external participant.
 
+## Git Behavior
+
+If the discussion file lives inside a git repo, `discuss-skill` can treat the discussion like normal versioned work.
+
+Supported git modes:
+
+1. `none`
+   Do not make discussion commits.
+2. `final_only`
+   Make one commit when the discussion reaches a final summary or stopping point.
+3. `every_turn`
+   Commit after every appended turn.
+
+Default behavior:
+
+1. if the tool can ask, it should ask once
+2. if it must infer, it should default to `final_only`
+
+Safety rules:
+
+1. do not stage unrelated files
+2. do not rewrite history
+3. do not push automatically
+
+So the short version is:
+
+1. yes, it can use git
+2. no, it should not behave like a goblin in your repo
+
 ## Install
 
 Clone the repo, then run:
@@ -398,6 +427,17 @@ Keep it short.
 The log is the full movie.
 The consensus is the trailer a busy human actually watches.
 
+## Example Discussions
+
+Want to see the actual file shape before using it? Start here:
+
+1. [examples/discussion-example.md](examples/discussion-example.md)
+   Small, simple, synthetic example.
+2. [examples/test-run-protocol-first.md](examples/test-run-protocol-first.md)
+   Adapted from a real isolated test run with a finished consensus.
+3. [examples/test-run-external-handoff.md](examples/test-run-external-handoff.md)
+   Adapted from a real isolated two-window handoff flow.
+
 ## Project Docs
 
 Current project docs:
@@ -410,11 +450,15 @@ Current project docs:
    Starter file for new discussions.
 4. [examples/discussion-example.md](examples/discussion-example.md)
    Small concrete example of a completed discussion.
-5. [adapters/claude/discuss/command.template.md](adapters/claude/discuss/command.template.md)
+5. [examples/test-run-protocol-first.md](examples/test-run-protocol-first.md)
+   Real test-derived example with final consensus.
+6. [examples/test-run-external-handoff.md](examples/test-run-external-handoff.md)
+   Real test-derived example showing turn handoff.
+7. [adapters/claude/discuss/command.template.md](adapters/claude/discuss/command.template.md)
    Claude-specific command surface.
-6. [adapters/codex/discuss/SKILL.template.md](adapters/codex/discuss/SKILL.template.md)
+8. [adapters/codex/discuss/SKILL.template.md](adapters/codex/discuss/SKILL.template.md)
    Codex-specific skill surface.
-7. [scripts/install.sh](scripts/install.sh)
+9. [scripts/install.sh](scripts/install.sh)
    Installer for Claude and Codex.
 
 Recommended future docs:
