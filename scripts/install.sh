@@ -46,22 +46,14 @@ if [[ "$INSTALL_CLAUDE" -eq 1 ]]; then
   render_skill \
     "$ROOT/adapters/claude/discuss/command.template.md" \
     "$HOME/.claude/commands/discuss.md"
-  render_skill \
-    "$ROOT/adapters/claude/discuss-in/command.template.md" \
-    "$HOME/.claude/commands/discuss-in.md"
   echo "Installed Claude commands:"
   echo "  - $HOME/.claude/commands/discuss.md"
-  echo "  - $HOME/.claude/commands/discuss-in.md"
 fi
 
 if [[ "$INSTALL_CODEX" -eq 1 ]]; then
   render_skill \
     "$ROOT/adapters/codex/discuss/SKILL.template.md" \
     "$HOME/.codex/skills/discuss/SKILL.md"
-  render_skill \
-    "$ROOT/adapters/codex/discuss-in/SKILL.template.md" \
-    "$HOME/.codex/skills/discuss-in/SKILL.md"
   echo "Installed Codex skills:"
   echo "  - $HOME/.codex/skills/discuss/SKILL.md"
-  echo "  - $HOME/.codex/skills/discuss-in/SKILL.md"
 fi

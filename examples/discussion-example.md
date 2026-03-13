@@ -3,10 +3,12 @@
 ---
 protocol: discuss-protocol-v1
 topic: "Should v1 use a shared CLI?"
+mode: external
 status: closed
 blind_briefs: true
 max_rounds: 5
 git_mode: final_only
+waiting_for: none
 participants:
   - Codex
   - Claude

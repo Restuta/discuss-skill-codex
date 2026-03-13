@@ -3,10 +3,12 @@
 ---
 protocol: discuss-protocol-v1
 topic: "{{TOPIC}}"
+mode: external
 status: active
 blind_briefs: true
 max_rounds: 5
 git_mode: none
+waiting_for: next-participant
 participants:
   - Codex
   - Claude

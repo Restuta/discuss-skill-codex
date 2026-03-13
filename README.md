@@ -13,7 +13,8 @@ The core design is intentionally small:
 1. one protocol document
 2. one discussion template
 3. one append-only markdown log per discussion
-4. thin host-specific skill adapters
+4. one user-facing command surface: `discuss`
+5. thin host-specific adapters
 
 There is no shared runtime engine in v1.
 There is no database.
@@ -29,21 +30,24 @@ That keeps install friction low and makes the project easier to open source:
 2. no sidecar state files
 3. no lock file in v1
 4. no adapter-specific logic forks
+5. one external interface across hosts
 
 ## Core Decisions In v1
 
 1. One append-only markdown discussion file is the source of truth.
-2. The protocol lives in [protocol/discuss-protocol-v1.md](/Users/restuta/Projects/prove.health/discuss-skill/protocol/discuss-protocol-v1.md).
-3. The default template lives in [templates/discussion-template.md](/Users/restuta/Projects/prove.health/discuss-skill/templates/discussion-template.md).
+2. The protocol lives in [protocol/discuss-protocol-v1.md](protocol/discuss-protocol-v1.md).
+3. The default template lives in [templates/discussion-template.md](templates/discussion-template.md).
 4. Turn safety uses `reread-before-append` and fail-closed behavior, not lock files.
 5. Blind briefs are optional, default `true`.
 6. Git modes are `none`, `final_only`, and `every_turn`, with `final_only` as the default when a git repo is detected and the user does not specify otherwise.
 7. Consensus and final summaries must stay concise and human-reviewable.
+8. The single user-facing interface is `discuss`; start vs continue is inferred from file existence.
+9. Discussion ownership is explicit through `mode` and `waiting_for`.
 
 ## File Layout
 
 ```text
-discuss-skill/
+discuss-skill-codex/
   README.md
   LICENSE
   protocol/
@@ -56,12 +60,8 @@ discuss-skill/
     claude/
       discuss/
         command.template.md
-      discuss-in/
-        command.template.md
     codex/
       discuss/
-        SKILL.template.md
-      discuss-in/
         SKILL.template.md
   scripts/
     install.sh
@@ -72,23 +72,21 @@ discuss-skill/
 Clone the repo, then run:
 
 ```bash
-cd discuss-skill
+cd discuss-skill-codex
 ./scripts/install.sh
 ```
 
-By default this installs both Claude and Codex skill variants into:
+By default this installs one `discuss` entry point for each host:
 
 1. `~/.claude/commands/discuss.md`
-2. `~/.claude/commands/discuss-in.md`
-3. `~/.codex/skills/discuss`
-4. `~/.codex/skills/discuss-in`
+2. `~/.codex/skills/discuss/SKILL.md`
 
 More precisely:
 
-1. Claude gets custom slash commands in `~/.claude/commands`
-2. Codex gets skills in `~/.codex/skills`
+1. Claude gets a custom slash command in `~/.claude/commands`
+2. Codex gets a skill in `~/.codex/skills`
 
-The installer writes skill files with absolute paths back to this cloned repo, so the protocol stays single-source.
+The installer writes files with absolute paths back to this cloned repo, so the protocol stays single-source.
 
 ### Install only one host
 
@@ -101,14 +99,22 @@ The installer writes skill files with absolute paths back to this cloned repo, s
 
 ### Start a new discussion
 
-Use the installed `discuss` skill in your host AI, give it:
+Use the installed `discuss` interface in your host AI, give it:
 
 1. a topic
 2. a target markdown file path
-3. optional participants
+3. optional `mode`
 4. optional git mode
 
-The skill should:
+Examples:
+
+```text
+/discuss --mode external "Should we rewrite auth?" notes/auth-discussion.md
+/discuss --mode council "What architecture should we use?" notes/architecture.md
+discuss --mode hybrid "Review this spec" spec-discussion.md
+```
+
+The command should:
 
 1. initialize the discussion file from the template
 2. append the first substantive turn
@@ -116,14 +122,55 @@ The skill should:
 
 ### Continue an existing discussion
 
-Use the installed `discuss-in` skill with an existing discussion file.
+Use the same `discuss` interface with an existing discussion file.
 
-The skill should:
+Examples:
+
+```text
+/discuss notes/auth-discussion.md
+discuss spec-discussion.md
+```
+
+The command should:
 
 1. reread the file
-2. determine whether it should speak
-3. append exactly one new turn if appropriate
-4. leave prior content untouched
+2. inspect `mode` and `waiting_for`
+3. determine whether it should speak now
+4. append exactly one new turn if appropriate
+5. leave prior content untouched
+
+## Modes
+
+### `external`
+
+Use this when another external AI or a human is expected to take the next turn through the shared file.
+
+Behavior:
+
+1. append one substantive turn
+2. update `waiting_for`
+3. yield
+
+### `council`
+
+Use this when the current host should run its own internal debate.
+
+Behavior:
+
+1. use host-native subagents or clearly separated internal lenses if available
+2. keep the shared file append-only
+3. let this host keep control until synthesis or consensus
+
+### `hybrid`
+
+Use this when the current host should do internal deliberation first, then hand one consolidated turn to another external participant.
+
+Behavior:
+
+1. run internal council
+2. append one consolidated host-level turn
+3. update `waiting_for`
+4. yield
 
 ## What A Good Discussion Produces
 
@@ -137,4 +184,4 @@ At the end, a good discussion file should make it easy for a human to scan:
 
 ## Example
 
-See [examples/discussion-example.md](/Users/restuta/Projects/prove.health/discuss-skill/examples/discussion-example.md).
+See [examples/discussion-example.md](examples/discussion-example.md).

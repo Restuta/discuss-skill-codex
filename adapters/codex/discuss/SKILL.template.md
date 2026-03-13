@@ -1,6 +1,6 @@
 ---
 name: discuss
-description: Start a new append-only multi-AI discussion file from the shared protocol. Use when the user wants to initialize a fresh discussion log, seed the first turn, and invite another AI or human to challenge the topic.
+description: Start or continue an append-only multi-AI discussion file from the shared protocol. Use when the user wants one `discuss` interface that can either initialize a fresh discussion or continue an existing one, with explicit `external`, `council`, or `hybrid` mode.
 ---
 
 # discuss
@@ -15,20 +15,48 @@ Use this template when creating a new discussion file:
 
 ## What to do
 
-1. Create the target discussion markdown file from the template.
-2. Fill in the topic, questions, participants, and initial state.
-3. If the discussion is inside a git repo and the user has not specified git mode, ask whether to use `none`, `final_only`, or `every_turn`. If you must infer, default to `final_only`.
-4. Append the first substantive turn as this host AI.
+1. Parse the user's request for:
+   - target markdown file path
+   - topic, if provided
+   - `mode`, if provided
+2. Use one interface for both start and continue:
+   - if the file does not exist, initialize it from the template
+   - if the file exists, continue it
+3. Default `mode` to `external` unless the user explicitly chooses `council` or `hybrid`.
+4. If the discussion is inside a git repo and the user has not specified git mode, ask whether to use `none`, `final_only`, or `every_turn`. If you must infer, default to `final_only`.
 5. Keep the file append-only.
 6. Do not create sidecar state files or lock files in v1.
-7. Keep the initial turn useful for another reviewer by ending with concrete challenge questions.
+7. Follow the protocol rules for `mode` and `waiting_for`.
+8. If you initialize the file, append the first substantive turn and end with concrete challenge questions.
+9. If you continue the file, append exactly one new turn unless the protocol clearly says it is not your turn.
+
+## Mode behavior
+
+### `external`
+
+1. Append one substantive turn.
+2. Update `waiting_for` to the next external participant if clear.
+3. Yield.
+
+### `council`
+
+1. Use host-native subagents if available.
+2. If not, simulate distinct internal lenses explicitly and honestly.
+3. This host owns the next moves until synthesis or consensus.
+
+### `hybrid`
+
+1. Do internal deliberation first if possible.
+2. Append one consolidated host-level turn.
+3. Update `waiting_for`.
+4. Yield.
 
 ## Output expectations
 
-The created file should:
+The resulting file should:
 
 1. be human-readable
-2. be easy for another AI to continue
+2. be easy for another AI or human to continue
 3. follow the protocol closely
 
 ## Guardrails
@@ -36,3 +64,4 @@ The created file should:
 1. Do not invent a separate protocol.
 2. Do not mutate prior turns.
 3. Keep the discussion structure simple.
+4. Do not expose `discuss-in` as a separate user-facing concept.

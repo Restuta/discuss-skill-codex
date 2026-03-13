@@ -57,10 +57,12 @@ Use a small frontmatter block at the top of the file:
 ---
 protocol: discuss-protocol-v1
 topic: "<topic>"
+mode: external
 status: active
 blind_briefs: true
 max_rounds: 5
 git_mode: none
+waiting_for: next-participant
 participants:
   - Codex
   - Claude
@@ -82,7 +84,53 @@ The file should start with:
 5. topics to resolve
 6. current state
 
-## 5. Turn Types
+## 5. Modes
+
+Use one of these modes:
+
+1. `external`
+2. `council`
+3. `hybrid`
+
+### 5.1 `external`
+
+Use this when the next substantive turn should come from another external AI or a human.
+
+Behavior:
+
+1. append one substantive turn
+2. update `waiting_for`
+3. yield
+
+### 5.2 `council`
+
+Use this when the current host is expected to run its own internal subagents or internal lenses.
+
+Behavior:
+
+1. the current host owns the next moves until synthesis or consensus
+2. the shared file remains append-only
+3. internal roles should be named clearly if they appear in the shared log
+
+Recommended role naming:
+
+1. `Codex-risk`
+2. `Codex-value`
+3. `Claude-risk`
+4. `Claude-value`
+
+### 5.3 `hybrid`
+
+Use this when the current host should deliberate internally first, then hand one consolidated turn to another external participant.
+
+Behavior:
+
+1. internal council first
+2. append one host-level turn to the shared file
+3. update `waiting_for`
+4. yield
+
+## 6. Turn Types
 
 Use only these turn types in v1:
 
@@ -100,9 +148,9 @@ Keep the heading simple:
 ## Codex | consensus | 2026-03-13
 ```
 
-## 6. Turn Body Shape
+## 7. Turn Body Shape
 
-### 6.1 Research
+### 7.1 Research
 
 Each `research` turn should usually contain:
 
@@ -112,7 +160,7 @@ Each `research` turn should usually contain:
 4. `Confidence`
 5. `Questions for the next reviewer`
 
-### 6.2 Response
+### 7.2 Response
 
 Each `response` turn should usually contain:
 
@@ -122,7 +170,7 @@ Each `response` turn should usually contain:
 4. `What still needs resolution`
 5. `Confidence`
 
-### 6.3 Consensus
+### 7.3 Consensus
 
 Each `consensus` turn must be concise and optimized for human review.
 
@@ -135,7 +183,7 @@ It must include:
 5. `Unresolved conflicts`
 6. `Confidence`
 
-### 6.4 Human-note
+### 7.4 Human-note
 
 Human notes may add:
 
@@ -144,7 +192,21 @@ Human notes may add:
 3. tie-break decisions
 4. questions
 
-## 7. Blind Briefs
+## 8. `waiting_for`
+
+`waiting_for` is a simple coordination hint, not a strict scheduler.
+
+Examples:
+
+1. `Codex`
+2. `Claude`
+3. `Human`
+4. `next-participant`
+5. `self`
+
+Use it to make ownership obvious to a human reviewer and to help host adapters decide whether to speak.
+
+## 9. Blind Briefs
 
 `blind_briefs` is optional and defaults to `true`.
 
@@ -159,7 +221,7 @@ When disabled:
 
 Use `blind_briefs: false` for lighter, lower-stakes discussions.
 
-## 8. Round Limits
+## 10. Round Limits
 
 Default `max_rounds` is `5`.
 
@@ -170,7 +232,7 @@ When the round cap is reached:
 
 This is simpler and more predictable than compression-heavy continuation logic.
 
-## 9. Same-Model Lazy Consensus
+## 11. Same-Model Lazy Consensus
 
 If two participants are likely to share the same model biases, assign different lenses.
 
@@ -184,7 +246,7 @@ Suggested lenses:
 Do not use different lenses as theater.
 Use them to force meaningful angle separation.
 
-## 10. Git Modes
+## 12. Git Modes
 
 Supported git modes:
 
@@ -200,7 +262,7 @@ Rules:
 4. never rewrite git history automatically
 5. do not push automatically in v1
 
-## 11. Good Consensus Output
+## 13. Good Consensus Output
 
 A good final result is snappy and easy for a human to scan.
 
@@ -215,18 +277,37 @@ It should make clear:
 Keep it concise.
 Do not turn the final summary into another full essay.
 
-## 12. Adapter Responsibilities
+## 14. Unified Host Interface
+
+Hosts should expose one user-facing entry point: `discuss`.
+
+Start vs continue should be determined like this:
+
+1. if the target file does not exist, initialize it
+2. if the target file exists, continue it
+3. if the target file is missing and no topic was given, ask or stop
+4. never overwrite an existing discussion file
+
+Recommended shapes:
+
+1. `discuss --mode external "topic" file.md`
+2. `discuss --mode council "topic" file.md`
+3. `discuss --mode hybrid "topic" file.md`
+4. `discuss file.md`
+
+## 15. Adapter Responsibilities
 
 Host adapters should only do host-specific things:
 
 1. expose the skill name
-2. gather the topic and file path
+2. gather the topic, file path, and mode
 3. point the AI at this protocol
 4. create or continue the discussion file
+5. use host-native subagents only when the selected mode calls for it
 
 Adapters should not invent their own competing protocol rules.
 
-## 13. Non-Goals For v1
+## 16. Non-Goals For v1
 
 1. lock files
 2. sidecar state
